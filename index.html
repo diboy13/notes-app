@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="src/styles/output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-[#FFF8F3] h-full dark:bg-[#afbdc9]">
+  <body class="bg-[#FFF8F3] h-full dark:bg-[#afbdc9] font-['Poppins']">
     <success-notification
       class="z-10 container hidden dark:bg-slate-600 border border-black shadow absolute max-[720px]:fixed top-[50%] h-[200px] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-md text-center p-4 bg-white w-[400px]"
       id="popup"
@@ -47,10 +53,32 @@
     >
       <form-control></form-control>
 
-      <notes-list
+      <div
         class="overflow-none min-[720px]:overflow-y-scroll w-full h-full min-[720px]:h-[85vh] notes-container"
       >
-      </notes-list>
+        <div
+          class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] h-36 gap-3 m-10"
+          id="container-notes"
+        >
+          <div
+            class="card h-[200px] flex flex-col hover:transform hover:scale-105 ease-in-out duration-300 justify-around max-w-sm p-6 border border-black rounded-lg shadow hover:bg-gray-100 dark:bg-gray-600 dark:border-gray-700 dark:hover:bg-gray-500 bg-[#F7E7DC]"
+            id="${this._note.id}"
+          >
+            <h1
+              class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-slate-200"
+            >
+              ${this._note.title}
+            </h1>
+            <p class="font-base text-gray-700 dark:text-gray-200">
+              ${this._note.body}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- <notes-list
+        class="overflow-none min-[720px]:overflow-y-scroll w-full h-full min-[720px]:h-[85vh] notes-container"
+      >
+      </notes-list> -->
     </div>
 
     <footer-app

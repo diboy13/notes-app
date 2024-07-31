@@ -4,6 +4,4 @@ import "./component/form-control.js";
 import "./component/footer-app.js";
 import "./component/success-notification.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  home();
-});
+home();
