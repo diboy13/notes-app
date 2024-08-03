@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="src/styles/output.css" rel="stylesheet" />
+    <!-- <link href="src/styles/output.css" rel="stylesheet" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   </head>
   <body class="bg-[#FFF8F3] h-full dark:bg-[#afbdc9] font-['Poppins']">
-    <success-notification
-      class="z-10 container hidden dark:bg-slate-600 border border-black shadow absolute max-[720px]:fixed top-[50%] h-[200px] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-md text-center p-4 bg-white w-[400px]"
-      id="popup"
-    ></success-notification>
+    <!-- success notification start -->
+    <div
+      id="popup-container"
+      class="z-10 absolute max-[720px]:fixed top-[50%] h-[200px] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+    ></div>
+    <!-- success notification end -->
 
+    <!-- dark mode start -->
     <div
       class="mt-3 flex items-center pl-8 lg:mt-0 absolute top-6 right-3 max-[1025px]:top-3"
       id="dark-tog1"
@@ -42,50 +46,115 @@
         >
       </div>
     </div>
+    <!-- dark mode end -->
 
+    <!-- header start -->
     <header-app
       background-color="#fed7aa"
       class="flex justify-center h-[72px] items-center py-4 dark:bg-[#405D72] max-[720px]:justify-start max-[720px]:p-3"
     ></header-app>
+    <!-- header end -->
 
+    <!-- content start -->
     <div
-      class="flex flex-col min-[720px]:flex-row min-[330px]:p-1 min-[720px]:p-0 max-[720px]:overflow-scroll max-[720px]:mb-1"
+      class="min-[720px]:flex min-[720px]:flex-row min-[330px]:p-1 min-[720px]:p-0 max-[720px]:mt-28"
     >
-      <form-control></form-control>
+      <form-control data-aos="zoom-in"></form-control>
 
       <div
-        class="overflow-none min-[720px]:overflow-y-scroll w-full h-full min-[720px]:h-[85vh] notes-container"
+        class="overflow-none min-[720px]:overflow-y-scroll w-full h-full min-[720px]:h-[85vh] max-[720px]:mb-12 max-[720px]:mt-32"
       >
-        <div
-          class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] h-36 gap-3 m-10"
-          id="container-notes"
-        >
+        <div class="" id="container-unarchive">
+          <div class="flex justify-start items-center ml-10 pt-4">
+            <h1 class="text-2xl text-black dark:text-white">Unarchived</h1>
+          </div>
           <div
-            class="card h-[200px] flex flex-col hover:transform hover:scale-105 ease-in-out duration-300 justify-around max-w-sm p-6 border border-black rounded-lg shadow hover:bg-gray-100 dark:bg-gray-600 dark:border-gray-700 dark:hover:bg-gray-500 bg-[#F7E7DC]"
-            id="${this._note.id}"
+            class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] min-[720px]:h-36 h-full gap-3 m-10"
+            id="container-notes-unarchive"
           >
-            <h1
-              class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-slate-200"
-            >
-              ${this._note.title}
-            </h1>
-            <p class="font-base text-gray-700 dark:text-gray-200">
-              ${this._note.body}
-            </p>
+            <div class="" id="loader">
+              <div
+                class="flex h-[600px] items-center justify-center border border-gray-200 rounded-lg shadow"
+              >
+                <div role="status">
+                  <svg
+                    aria-hidden="true"
+                    class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
+                    />
+                  </svg>
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hidden" id="container-archive">
+          <div class="flex justify-start items-center ml-10 pt-4">
+            <h1 class="text-2xl text-black dark:text-white">Archived</h1>
+          </div>
+          <div
+            class="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] min-[720px]:h-36 gap-3 m-10"
+            id="container-notes-archive"
+          >
+            <div class="" id="loader">
+              <div
+                class="flex h-[600px] items-center justify-center border border-gray-200 rounded-lg shadow"
+              >
+                <div role="status">
+                  <svg
+                    aria-hidden="true"
+                    class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
+                    />
+                  </svg>
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- <notes-list
-        class="overflow-none min-[720px]:overflow-y-scroll w-full h-full min-[720px]:h-[85vh] notes-container"
-      >
-      </notes-list> -->
     </div>
+    <!-- content end -->
 
+    <!-- Back to top Start -->
+    <a
+      href="#"
+      class="fixed bottom-10 right-1 z-[9999] hidden h-14 w-14 items-center justify-center rounded-full dark:bg-[#405D72] bg-[#fed7aa] p-4 animate-bounce ring-1 dark:ring-white ring-black"
+      id="to-top"
+    >
+      <span
+        class="mt-2 block h-5 w-5 rotate-45 border-t-2 border-l-2 border-black"
+      ></span>
+    </a>
+    <!-- Back to top End -->
+
+    <!-- footer start -->
     <footer-app
       background-color="#fed7aa"
       class="flex justify-center dark:bg-[#405D72] w-full items-center py-2 fixed bottom-0"
     ></footer-app>
-
-    <script type="module" src="src/app.js"></script>
+    <!-- footer end -->
   </body>
 </html>

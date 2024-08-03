@@ -1,7 +1,10 @@
-import home from "./script/view/home.js";
-import "./component/header-app.js";
-import "./component/form-control.js";
-import "./component/footer-app.js";
-import "./component/success-notification.js";
+const home = require("./script/view/home.js");
+require("./component/header-app.js");
+require("./component/form-control.js");
+require("./component/footer-app.js");
 
-home();
+require("./styles/input.css");
+
+document.addEventListener("DOMContentLoaded", () => {
+  home();
+});
