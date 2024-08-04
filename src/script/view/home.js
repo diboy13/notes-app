@@ -5,18 +5,29 @@ const home = () => {
   const title = document.querySelector("#title");
   const content = document.querySelector("#content");
   const baseUrl = "https://notes-api.dicoding.dev/v2";
-  const loader = document.querySelector("#loader");
+  const loaderUnarchive = document.querySelector("#loader-unarchive");
+  const loaderArchive = document.querySelector("#loader-archive");
 
-  const showLoader = () => {
-    loader.classList.add("hidden");
+  const showLoaderUnarchive = () => {
+    loaderUnarchive.classList.remove("hidden");
+    loaderUnarchive.classList.add("visible");
   };
 
-  const hideLoader = () => {
-    loader.classList.remove("hidden");
+  const hideLoaderUnarchive = () => {
+    loaderUnarchive.classList.add("hidden");
+  };
+
+  const showLoaderArchive = () => {
+    loaderArchive.classList.remove("hidden");
+    loaderArchive.classList.add("visible");
+  };
+
+  const hideLoaderArchive = () => {
+    loaderArchive.classList.add("hidden");
   };
 
   const getNotesUnarchive = async () => {
-    showLoader();
+    showLoaderUnarchive();
     try {
       const response = await fetch(`${baseUrl}/notes`);
       const responseJson = await response.json();
@@ -25,25 +36,28 @@ const home = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      hideLoader();
+      hideLoaderUnarchive();
     }
   };
 
   const getNotesArchive = async () => {
-    showLoader();
+    showLoaderArchive();
     try {
       const response = await fetch(`${baseUrl}/notes/archived`);
       const responseJson = await response.json();
+      showLoaderArchive();
 
       renderArchiveNotes(responseJson.data);
     } catch (error) {
       console.log(error);
     } finally {
-      hideLoader();
+      hideLoaderArchive();
     }
   };
 
   const insertNotes = async (book) => {
+    showLoaderUnarchive();
+    showLoaderArchive();
     try {
       const response = await fetch(`${baseUrl}/notes`, {
         method: "POST",
@@ -54,14 +68,19 @@ const home = () => {
       });
       const responseJson = await response.json();
       showResponseMessage(responseJson.message);
+
       getNotesUnarchive();
     } catch (error) {
-      // showResponseMessage(error);
-      console.log(error);
+      showResponseMessage(error);
+      // console.log(error);
+    } finally {
+      hideLoaderUnarchive();
+      hideLoaderArchive();
     }
   };
 
   const archiveNote = async (notesId) => {
+    showLoaderArchive();
     try {
       const response = await fetch(`${baseUrl}/notes/${notesId}/archive`, {
         method: "POST",
@@ -73,10 +92,13 @@ const home = () => {
     } catch (error) {
       // showResponseMessage(error);
       console.log(error);
+    } finally {
+      showLoaderArchive();
     }
   };
 
   const unarchiveNote = async (notesId) => {
+    showLoaderUnarchive();
     try {
       const response = await fetch(`${baseUrl}/notes/${notesId}/unarchive`, {
         method: "POST",
@@ -88,23 +110,13 @@ const home = () => {
     } catch (error) {
       showResponseMessage(error);
       console.log(error);
+    } finally {
+      showLoaderUnarchive();
     }
   };
 
   const deleteNotesUnarchive = async (notesId) => {
-    try {
-      const response = await fetch(`${baseUrl}/notes/${notesId}`, {
-        method: "DELETE",
-      });
-      const responseJson = await response.json();
-      showResponseMessage(responseJson.message);
-      getNotesUnarchive();
-    } catch (error) {
-      showResponseMessage(error);
-    }
-  };
-
-  const deleteNotesArchive = async (notesId) => {
+    showLoaderUnarchive();
     try {
       const response = await fetch(`${baseUrl}/notes/${notesId}`, {
         method: "DELETE",
@@ -115,10 +127,30 @@ const home = () => {
       getNotesUnarchive();
     } catch (error) {
       showResponseMessage(error);
+    } finally {
+      showLoaderUnarchive();
+    }
+  };
+
+  const deleteNotesArchive = async (notesId) => {
+    showLoaderArchive();
+    try {
+      const response = await fetch(`${baseUrl}/notes/${notesId}`, {
+        method: "DELETE",
+      });
+      const responseJson = await response.json();
+      showResponseMessage(responseJson.message);
+      getNotesArchive();
+      getNotesUnarchive();
+    } catch (error) {
+      showResponseMessage(error);
+    } finally {
+      showLoaderArchive();
     }
   };
 
   form.addEventListener("submit", (e) => {
+    // showLoaderUnarchive();
     e.preventDefault();
 
     const notes = {
@@ -200,6 +232,7 @@ const home = () => {
     const containerNotesUnarchive = document.querySelector(
       "#container-notes-unarchive"
     );
+
     containerNotesUnarchive.innerHTML = "";
 
     notes.forEach((data) => {
@@ -208,7 +241,7 @@ const home = () => {
                 <div
             class="relative card h-[250px] flex flex-col hover:transform hover:scale-105 ease-in-out duration-300 justify-around max-w-sm p-6 border border-black rounded-lg shadow hover:bg-gray-100 dark:bg-gray-600 dark:border-gray-700 dark:hover:bg-gray-500 bg-[#F7E7DC]"
             id="${data.id}"
-            data-aos="flip-left"
+            data-aos="zoom-in"
 
           >
             <h1
@@ -255,7 +288,7 @@ const home = () => {
                 <div
             class="relative card h-[250px] flex flex-col hover:transform hover:scale-105 ease-in-out duration-300 justify-around max-w-sm p-6 border border-black rounded-lg shadow hover:bg-gray-100 dark:bg-gray-600 dark:border-gray-700 dark:hover:bg-gray-500 bg-[#F7E7DC]"
             id="${data.id}"
-            data-aos="flip-left"
+            data-aos="zoom-in"
           >
             <h1
               class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-slate-200"
@@ -387,9 +420,10 @@ const home = () => {
       toTop.classList.add("hidden");
     }
   };
-
+  // showLoaderUnarchive();
   getNotesArchive();
   getNotesUnarchive();
+  // hideLoaderUnarchive();
 
   AOS.init({
     once: true,
